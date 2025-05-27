@@ -145,19 +145,41 @@ list_available_servers() {
         # Skip utils.sh
         if [[ "$(basename "$server_file")" != "utils.sh" ]]; then
             server_name=$(basename "$server_file" .sh)
+            # Get documentation link from the server script
+            if grep -q "DOCUMENTATION_LINK=" "$server_file"; then
+                doc_link=$(grep "DOCUMENTATION_LINK=" "$server_file" | cut -d'"' -f2)
+            else
+                doc_link=""
+            fi
             
             # Check if server is installed
             if is_server_installed "$server_name"; then
-                echo -e "$i. $server_name ${GREEN}[Installed]${NC}"
+                printf "$i. "
+                clickable_link "$server_name" "$doc_link"
+                printf " ${GREEN}[Installed]${NC}\n"
             else
-                echo "$i. $server_name"
+                printf "$i. "
+                clickable_link "$server_name" "$doc_link"
+                printf "\n"
             fi
             
             i=$((i+1))
         fi
     done
     
-    echo "0. install all"
-    echo "x. exit and clean up"
+    echo -e "\n0. install all"
+    echo -e "x. exit and clean up"
     echo ""
+}
+
+clickable_link() {
+    local alias="$1"
+    local url="$2"
+    
+    # Use printf to create a clickable link in terminal
+    if [[ -n "$url" ]]; then
+        printf "${BLUE}\e]8;;%s\e\\%s\e]8;;\e${NC}" "$url" "$alias"
+    else
+        printf "${BLUE}%s${NC}" "$alias"
+    fi
 }

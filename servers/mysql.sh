@@ -3,6 +3,7 @@
 
 # Define the name used in the MCP config
 CONFIG_NAME="mysql"
+DOCUMENTATION_LINK="https://github.com/Breven217/JoyfulSQL_MCP"
 
 # Function to create MySQL environment file
 setup_mysql() {
@@ -119,7 +120,7 @@ create_mysql_env() {
 
     # Use printf to create a clickable link in terminal
     printf "Enter your Odi Password (default can be found "
-    printf "${BLUE}\e]8;;https://vault.bamboohr.io/ui/vault/secrets/shared/show/shared-product-dev/stage_database_password\e\\here\e]8;;${NC}\e\\"
+    clickable_link "here" "https://vault.bamboohr.io/ui/vault/secrets/shared/show/shared-product-dev/stage_database_password"
     printf "): "
     
     read -r odi_password

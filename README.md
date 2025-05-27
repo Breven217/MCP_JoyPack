@@ -74,6 +74,15 @@ You'll need to provide:
 - Odi SSH Port
 - Odi SSH Key Path
 
+### Rollbar MCP Server
+
+The Rollbar MCP server provides access to Rollbar functionality through the MCP protocol.
+
+#### Configuration
+
+You'll need to provide:
+- Rollbar API Token
+
 ## Windsurf/Codeium Integration
 
 MCP JoyPack automatically configures your MCP servers for use with Windsurf/Codeium by:
@@ -96,7 +105,10 @@ Adding a new MCP server is simple with the modular architecture:
 
 # New Server MCP Setup Script
 # Define the name used in the MCP config
-CONFIG_NAME="mcp-new-server"    
+CONFIG_NAME="mcp-new-server"
+
+# Documentation link for the new server this will be used as a clickable link in the installer
+DOCUMENTATION_LINK="https://github.com/your-repo/new-server-mcp"
 
 # Function to set up the new server
 setup_new-server() {

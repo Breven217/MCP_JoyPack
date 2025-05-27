@@ -3,6 +3,7 @@
 
 # Define the name used in the MCP config
 CONFIG_NAME="mcp-atlassian"
+DOCUMENTATION_LINK="https://github.com/sooperset/mcp-atlassian"
 
 # Function to create Atlassian environment file
 setup_atlassian() {
