@@ -35,7 +35,6 @@ bash ./install.sh
 
 # Clean up
 echo -e "${BLUE}Cleaning up...${NC}"
+echo ""
 cd - > /dev/null
 rm -rf "$TMP_DIR"
-
-echo -e "${GREEN}MCP JoyPack installation complete!${NC}"

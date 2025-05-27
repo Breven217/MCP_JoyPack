@@ -131,7 +131,6 @@ main() {
         
         if [[ "$choice" == "x" ]]; then
             echo -e "${GREEN}Exiting MCP JoyPack. Goodbye!${NC}"
-            echo ""
             exit 0
         elif [[ "$choice" == "0" ]]; then
             # Install all servers
