@@ -7,6 +7,10 @@ CONFIG_NAME="mysql"
 # Function to create MySQL environment file
 setup_mysql() {
     echo -e "\n${BLUE}Setting up MySQL MCP server...${NC}"
+
+    # Pull Docker image
+    echo -e "\n${BLUE}Pulling MySQL MCP server Docker image...${NC}"
+    docker pull ghcr.io/breven217/joyfulsql_mcp:latest
     
     # Ensure MCP directory exists
     mkdir -p ~/.mcp

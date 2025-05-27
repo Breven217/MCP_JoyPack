@@ -7,6 +7,10 @@ CONFIG_NAME="mcp-atlassian"
 # Function to create Atlassian environment file
 setup_atlassian() {
     echo -e "\n${BLUE}Setting up Atlassian MCP server...${NC}"
+
+    # Pull Docker image
+    echo -e "\n${BLUE}Pulling Atlassian MCP server Docker image...${NC}"
+    docker pull ghcr.io/sooperset/mcp-atlassian:latest
     
     # Ensure MCP directory exists
     mkdir -p ~/.mcp
