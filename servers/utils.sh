@@ -158,6 +158,6 @@ list_available_servers() {
     done
     
     echo "0. install all"
-    echo "x. exit"
+    echo "x. exit and clean up"
     echo ""
 }

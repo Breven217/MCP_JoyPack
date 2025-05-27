@@ -6,20 +6,15 @@
 # Colors for better readability
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=======================================${NC}"
-echo -e "${GREEN}MCP JoyPack - Downloader${NC}"
-echo -e "${BLUE}=======================================${NC}"
-
 # Create a temporary directory
 TMP_DIR=$(mktemp -d)
-echo -e "${BLUE}Created temporary directory: $TMP_DIR${NC}"
+echo -e "Created temporary directory: $TMP_DIR"
 
 # Download the repository directly
-echo -e "${BLUE}Downloading MCP JoyPack...${NC}"
+echo -e "Downloading MCP JoyPack..."
 curl -L https://github.com/Breven217/MCP_JoyPack/archive/main.tar.gz | tar xz -C "$TMP_DIR" --strip-components=1
 
 if [ $? -ne 0 ]; then
@@ -29,7 +24,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Make scripts executable
-echo -e "${BLUE}Making scripts executable...${NC}"
+echo -e "Making scripts executable..."
 chmod +x "$TMP_DIR/install.sh"
 find "$TMP_DIR/servers" -name "*.sh" -exec chmod +x {} \;
 
