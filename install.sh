@@ -23,8 +23,10 @@ handle_one_liner_install() {
         
         # Create a temporary directory
         TMP_DIR=$(mktemp -d)
+        echo -e "${BLUE}Created temporary directory: $TMP_DIR${NC}"
         
         # Clone the repository to the temporary directory
+        echo -e "${BLUE}Cloning repository...${NC}"
         git clone https://github.com/Breven217/MCP_JoyPack.git "$TMP_DIR" 2>/dev/null
         
         if [ $? -ne 0 ]; then
@@ -32,11 +34,18 @@ handle_one_liner_install() {
             curl -L https://github.com/Breven217/MCP_JoyPack/archive/main.tar.gz | tar xz -C "$TMP_DIR" --strip-components=1
         fi
         
+        # Make sure scripts are executable
+        chmod +x "$TMP_DIR/install.sh"
+        chmod +x "$TMP_DIR/servers"/*.sh 2>/dev/null
+        
         # Run the local installation from the temporary directory
+        echo -e "${BLUE}Running installation from $TMP_DIR...${NC}"
         cd "$TMP_DIR"
-        bash ./install.sh
+        # Use the full path to ensure SCRIPT_DIR is set correctly
+        bash "$TMP_DIR/install.sh" --local
         
         # Clean up
+        echo -e "${BLUE}Cleaning up temporary files...${NC}"
         cd - > /dev/null
         rm -rf "$TMP_DIR"
         exit 0
@@ -100,6 +109,31 @@ install_all_servers() {
 
 # Main function
 main() {
+    # Check for local flag (used in one-liner installation)
+    if [[ "$1" == "--local" ]]; then
+        echo -e "${BLUE}Running in local mode from downloaded repository${NC}"
+        # Make sure SCRIPT_DIR is correctly set
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        echo -e "${BLUE}Script directory: $SCRIPT_DIR${NC}"
+    fi
+    
+    # Check if servers directory exists
+    if [ ! -d "$SCRIPT_DIR/servers" ]; then
+        echo -e "${RED}Error: servers directory not found at $SCRIPT_DIR/servers${NC}"
+        echo -e "${YELLOW}This may be due to an incomplete download or incorrect directory structure.${NC}"
+        exit 1
+    fi
+    
+    # Check if utils.sh exists
+    if [ ! -f "$SCRIPT_DIR/servers/utils.sh" ]; then
+        echo -e "${RED}Error: utils.sh not found at $SCRIPT_DIR/servers/utils.sh${NC}"
+        echo -e "${YELLOW}This may be due to an incomplete download or incorrect directory structure.${NC}"
+        exit 1
+    fi
+    
+    # Source the utility functions again to be safe
+    source "$SCRIPT_DIR/servers/utils.sh"
+    
     # Load all server scripts
     load_server_scripts
     
