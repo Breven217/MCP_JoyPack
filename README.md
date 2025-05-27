@@ -15,7 +15,7 @@ MCP JoyPack provides the easiest way to set up various MCP servers. It features 
 Install and configure MCP servers with this single command:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Breven217/MCP_JoyPack/main/download.sh)"
+bash -c "$(curl -fsSL https://bit.ly/MCPJoyPack)"
 ```
 
 That's it! The script will:
