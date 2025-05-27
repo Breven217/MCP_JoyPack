@@ -108,11 +108,8 @@ main() {
     load_server_scripts
     
     # Get available server scripts
-    echo -e "${BLUE}DEBUG: Looking for server scripts in $SCRIPT_DIR/servers${NC}"
     local server_files=($(find "$SCRIPT_DIR/servers" -name "*.sh" ! -name "utils.sh" 2>/dev/null | sort))
-    echo -e "${BLUE}DEBUG: Found server files: ${server_files[*]}${NC}"
     local server_count=${#server_files[@]}
-    echo -e "${BLUE}DEBUG: Server count: $server_count${NC}"
     
     # Check if we found any server scripts
     if [ $server_count -eq 0 ]; then
