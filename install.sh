@@ -34,14 +34,41 @@ handle_one_liner_install() {
             exit 1
         fi
         
+        # Check if the download was successful
+        if [ ! -f "$TMP_DIR/install.sh" ]; then
+            echo -e "${RED}Error: install.sh not found in downloaded repository.${NC}"
+            echo -e "${YELLOW}Contents of temporary directory:${NC}"
+            ls -la "$TMP_DIR"
+            rm -rf "$TMP_DIR"
+            exit 1
+        fi
+        
+        if [ ! -d "$TMP_DIR/servers" ]; then
+            echo -e "${RED}Error: servers directory not found in downloaded repository.${NC}"
+            echo -e "${YELLOW}Contents of temporary directory:${NC}"
+            ls -la "$TMP_DIR"
+            rm -rf "$TMP_DIR"
+            exit 1
+        fi
+        
         # Make scripts executable
+        echo -e "${BLUE}Making scripts executable...${NC}"
         chmod +x "$TMP_DIR/install.sh"
         find "$TMP_DIR/servers" -name "*.sh" -exec chmod +x {} \;
         
+        # Show what we found
+        echo -e "${BLUE}Found server scripts:${NC}"
+        find "$TMP_DIR/servers" -name "*.sh" | sort
+        
         # Run the installation script directly
-        echo -e "${BLUE}Running installation...${NC}"
+        echo -e "${BLUE}Running installation from $TMP_DIR...${NC}"
         cd "$TMP_DIR"
-        exec bash "$TMP_DIR/install.sh" --local
+        bash "$TMP_DIR/install.sh" --local
+        
+        # Clean up
+        echo -e "${BLUE}Cleaning up...${NC}"
+        rm -rf "$TMP_DIR"
+        exit 0
     fi
 }
 
@@ -131,8 +158,11 @@ main() {
     load_server_scripts
     
     # Get available server scripts
+    echo -e "${BLUE}DEBUG: Looking for server scripts in $SCRIPT_DIR/servers${NC}"
     local server_files=($(find "$SCRIPT_DIR/servers" -name "*.sh" ! -name "utils.sh" 2>/dev/null | sort))
+    echo -e "${BLUE}DEBUG: Found server files: ${server_files[*]}${NC}"
     local server_count=${#server_files[@]}
+    echo -e "${BLUE}DEBUG: Server count: $server_count${NC}"
     
     # Check if we found any server scripts
     if [ $server_count -eq 0 ]; then

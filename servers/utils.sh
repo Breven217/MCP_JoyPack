@@ -127,12 +127,32 @@ list_available_servers() {
     
     echo -e "\n${BLUE}Available MCP servers:${NC}"
     echo -e "${BLUE}----------------------${NC}"
+    echo -e "${BLUE}DEBUG: Servers directory: $servers_dir${NC}"
+    
+    # Check if the directory exists
+    if [ ! -d "$servers_dir" ]; then
+        echo -e "${RED}ERROR: Servers directory does not exist: $servers_dir${NC}"
+        return 1
+    fi
+    
+    # List all files in the directory
+    echo -e "${BLUE}DEBUG: Directory contents:${NC}"
+    ls -la "$servers_dir"
     
     # List all .sh files except utils.sh
     for server_file in "$servers_dir"/*.sh; do
+        echo -e "${BLUE}DEBUG: Processing file: $server_file${NC}"
+        
+        # Check if file exists (in case the glob didn't match anything)
+        if [ ! -f "$server_file" ]; then
+            echo -e "${RED}ERROR: No .sh files found in $servers_dir${NC}"
+            break
+        fi
+        
         # Skip utils.sh
         if [[ "$(basename "$server_file")" != "utils.sh" ]]; then
             server_name=$(basename "$server_file" .sh)
+            echo -e "${BLUE}DEBUG: Server name: $server_name${NC}"
             
             # Check if server is installed
             if is_server_installed "$server_name"; then
@@ -142,6 +162,8 @@ list_available_servers() {
             fi
             
             i=$((i+1))
+        else
+            echo -e "${BLUE}DEBUG: Skipping utils.sh${NC}"
         fi
     done
     
