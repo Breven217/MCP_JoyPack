@@ -16,39 +16,32 @@ echo -e "${BLUE}=======================================${NC}"
 
 # Function to handle one-liner installation
 handle_one_liner_install() {
-    # If this script was run directly (not sourced), and we're in a one-liner context
-    # We need to download the entire repository to a temporary directory
+    # Check if we're running via curl pipe to bash
     if [ "$0" = "bash" ] || [ "$(basename "$0")" = "bash" ]; then
-        echo -e "${BLUE}Running in one-liner mode. Downloading MCP JoyPack...${NC}"
+        echo -e "${BLUE}Running in one-liner mode...${NC}"
         
         # Create a temporary directory
         TMP_DIR=$(mktemp -d)
         echo -e "${BLUE}Created temporary directory: $TMP_DIR${NC}"
         
-        # Clone the repository to the temporary directory
-        echo -e "${BLUE}Cloning repository...${NC}"
-        git clone https://github.com/Breven217/MCP_JoyPack.git "$TMP_DIR" 2>/dev/null
+        # Download the repository
+        echo -e "${BLUE}Downloading repository...${NC}"
+        curl -L https://github.com/Breven217/MCP_JoyPack/archive/main.tar.gz | tar xz -C "$TMP_DIR" --strip-components=1
         
         if [ $? -ne 0 ]; then
-            echo -e "${YELLOW}Git clone failed. Trying direct download...${NC}"
-            curl -L https://github.com/Breven217/MCP_JoyPack/archive/main.tar.gz | tar xz -C "$TMP_DIR" --strip-components=1
+            echo -e "${RED}Failed to download repository. Please try again.${NC}"
+            rm -rf "$TMP_DIR"
+            exit 1
         fi
         
-        # Make sure scripts are executable
+        # Make scripts executable
         chmod +x "$TMP_DIR/install.sh"
-        chmod +x "$TMP_DIR/servers"/*.sh 2>/dev/null
+        find "$TMP_DIR/servers" -name "*.sh" -exec chmod +x {} \;
         
-        # Run the local installation from the temporary directory
-        echo -e "${BLUE}Running installation from $TMP_DIR...${NC}"
+        # Run the installation script directly
+        echo -e "${BLUE}Running installation...${NC}"
         cd "$TMP_DIR"
-        # Use the full path to ensure SCRIPT_DIR is set correctly
-        bash "$TMP_DIR/install.sh" --local
-        
-        # Clean up
-        echo -e "${BLUE}Cleaning up temporary files...${NC}"
-        cd - > /dev/null
-        rm -rf "$TMP_DIR"
-        exit 0
+        exec bash "$TMP_DIR/install.sh" --local
     fi
 }
 
@@ -137,6 +130,21 @@ main() {
     # Load all server scripts
     load_server_scripts
     
+    # Get available server scripts
+    local server_files=($(find "$SCRIPT_DIR/servers" -name "*.sh" ! -name "utils.sh" 2>/dev/null | sort))
+    local server_count=${#server_files[@]}
+    
+    # Check if we found any server scripts
+    if [ $server_count -eq 0 ]; then
+        echo -e "${RED}Error: No server scripts found in $SCRIPT_DIR/servers${NC}"
+        echo -e "${YELLOW}This may be due to an incomplete download or incorrect directory structure.${NC}"
+        echo -e "Directory contents:"
+        ls -la "$SCRIPT_DIR/servers"
+        exit 1
+    fi
+    
+    echo -e "${GREEN}Found $server_count MCP servers available for installation.${NC}"
+    
     while true; do
         # List available servers
         list_available_servers "$SCRIPT_DIR/servers"
@@ -152,22 +160,20 @@ main() {
             # Install all servers
             install_all_servers
         elif [[ "$choice" =~ ^[0-9]+$ ]]; then
-            # Get all server scripts (excluding utils.sh)
-            local server_files=($(find "$SCRIPT_DIR/servers" -name "*.sh" ! -name "utils.sh" | sort))
-            local server_count=${#server_files[@]}
-            
             if [ "$choice" -le "$server_count" ] && [ "$choice" -gt 0 ]; then
                 # Get the selected server name (array is 0-indexed, so subtract 1 from choice)
                 local index=$((choice-1))
                 local selected_server=$(basename "${server_files[$index]}" .sh)
                 
+                echo -e "${BLUE}Selected server: $selected_server${NC}"
+                
                 # Run the setup for the selected server
                 run_server_setup "$selected_server"
             else
-                echo -e "${YELLOW}Invalid option. Please try again.${NC}"
+                echo -e "${YELLOW}Invalid option. Please select a number between 1 and $server_count, or 0 for all servers.${NC}"
             fi
         else
-            echo -e "${YELLOW}Invalid option. Please try again.${NC}"
+            echo -e "${YELLOW}Invalid option. Please select a number between 1 and $server_count, 0 for all servers, or x to exit.${NC}"
         fi
     done
 }
