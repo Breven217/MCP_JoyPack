@@ -15,10 +15,16 @@ MCP JoyPack provides the easiest way to set up various MCP servers. It features 
 Install and configure MCP servers with this single command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/breven217/MCP_JoyPack/main/install.sh | bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Breven217/MCP_JoyPack/main/download.sh)"
 ```
 
-That's it! The script will guide you through selecting and configuring your desired MCP servers.
+That's it! The script will:
+1. Download the MCP JoyPack to a temporary directory
+2. Run the interactive installer
+3. Guide you through selecting and configuring your desired MCP servers
+4. Clean up automatically when finished
+
+No need to clone the repository or install any additional tools (other than Docker).
 
 ## Modular Architecture
 

@@ -1,79 +1,25 @@
 #!/bin/bash
 
 # MCP JoyPack - Modular MCP Server Installer
-# This script provides a one-liner way to install various MCP servers
+# This script provides an easy way to install various MCP servers
+
+# Colors for better readability
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Source the utility functions
-source "$SCRIPT_DIR/servers/utils.sh"
 
 echo ""
 echo -e "${BLUE}=======================================${NC}"
 echo -e "${GREEN}MCP JoyPack - MCP Server Installer${NC}"
 echo -e "${BLUE}=======================================${NC}"
 
-# Function to handle one-liner installation
-handle_one_liner_install() {
-    # Check if we're running via curl pipe to bash
-    if [ "$0" = "bash" ] || [ "$(basename "$0")" = "bash" ]; then
-        echo -e "${BLUE}Running in one-liner mode...${NC}"
-        
-        # Create a temporary directory
-        TMP_DIR=$(mktemp -d)
-        echo -e "${BLUE}Created temporary directory: $TMP_DIR${NC}"
-        
-        # Download the repository
-        echo -e "${BLUE}Downloading repository...${NC}"
-        curl -L https://github.com/Breven217/MCP_JoyPack/archive/main.tar.gz | tar xz -C "$TMP_DIR" --strip-components=1
-        
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}Failed to download repository. Please try again.${NC}"
-            rm -rf "$TMP_DIR"
-            exit 1
-        fi
-        
-        # Check if the download was successful
-        if [ ! -f "$TMP_DIR/install.sh" ]; then
-            echo -e "${RED}Error: install.sh not found in downloaded repository.${NC}"
-            echo -e "${YELLOW}Contents of temporary directory:${NC}"
-            ls -la "$TMP_DIR"
-            rm -rf "$TMP_DIR"
-            exit 1
-        fi
-        
-        if [ ! -d "$TMP_DIR/servers" ]; then
-            echo -e "${RED}Error: servers directory not found in downloaded repository.${NC}"
-            echo -e "${YELLOW}Contents of temporary directory:${NC}"
-            ls -la "$TMP_DIR"
-            rm -rf "$TMP_DIR"
-            exit 1
-        fi
-        
-        # Make scripts executable
-        echo -e "${BLUE}Making scripts executable...${NC}"
-        chmod +x "$TMP_DIR/install.sh"
-        find "$TMP_DIR/servers" -name "*.sh" -exec chmod +x {} \;
-        
-        # Show what we found
-        echo -e "${BLUE}Found server scripts:${NC}"
-        find "$TMP_DIR/servers" -name "*.sh" | sort
-        
-        # Run the installation script directly
-        echo -e "${BLUE}Running installation from $TMP_DIR...${NC}"
-        cd "$TMP_DIR"
-        bash "$TMP_DIR/install.sh" --local
-        
-        # Clean up
-        echo -e "${BLUE}Cleaning up...${NC}"
-        rm -rf "$TMP_DIR"
-        exit 0
-    fi
-}
-
-# Try to handle one-liner installation if applicable
-handle_one_liner_install
+# Source the utility functions
+source "$SCRIPT_DIR/servers/utils.sh"
 
 # Function to load server scripts
 load_server_scripts() {
@@ -129,12 +75,16 @@ install_all_servers() {
 
 # Main function
 main() {
+    # Flag to track if we're running in one-liner mode
+    local one_liner_mode=false
+    
     # Check for local flag (used in one-liner installation)
     if [[ "$1" == "--local" ]]; then
         echo -e "${BLUE}Running in local mode from downloaded repository${NC}"
         # Make sure SCRIPT_DIR is correctly set
         SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
         echo -e "${BLUE}Script directory: $SCRIPT_DIR${NC}"
+        one_liner_mode=true
     fi
     
     # Check if servers directory exists
