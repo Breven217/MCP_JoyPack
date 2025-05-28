@@ -13,7 +13,8 @@ NC='\033[0m' # No Color
 update_mcp_config() {
     local server_name="$1"
     local server_config="$2"
-    
+    local config_name=$(get_config_name "$server_name")
+
     # Ensure config directory exists
     mkdir -p ~/.codeium/windsurf
     
@@ -65,7 +66,7 @@ update_mcp_config() {
         cat > ~/.codeium/windsurf/mcp_config.json << EOF
 {
   "mcpServers": {
-    "$server_name": $server_config
+    "$config_name": $server_config
   }
 }
 EOF
@@ -86,20 +87,7 @@ check_docker() {
 # Function to check if a server is installed
 is_server_installed() {
     local server_name="$1"
-    local config_name
-    
-    # Get the CONFIG_NAME variable from the server script if available
-    if [ -f "$SCRIPT_DIR/servers/$server_name.sh" ]; then
-        # Source the script to get the CONFIG_NAME variable
-        # We use a subshell to avoid polluting the current environment
-        config_name=$(bash -c "source $SCRIPT_DIR/servers/$server_name.sh 2>/dev/null && echo \$CONFIG_NAME")
-    fi
-    
-    # If CONFIG_NAME wasn't defined, use a fallback approach
-    if [ -z "$config_name" ]; then
-        # Fallback: try common naming patterns
-        config_name="$server_name"
-    fi
+    local config_name=$(get_config_name "$server_name")
     
     # Check if MCP config exists
     if [ -f ~/.codeium/windsurf/mcp_config.json ]; then
@@ -170,6 +158,26 @@ list_available_servers() {
     echo -e "\n0. install all"
     echo -e "x. exit and clean up"
     echo ""
+}
+
+get_config_name() {
+    local server_name="$1"
+    local config_name
+    
+    # Get the CONFIG_NAME variable from the server script if available
+    if [ -f "$SCRIPT_DIR/servers/$server_name.sh" ]; then
+        # Source the script to get the CONFIG_NAME variable
+        # We use a subshell to avoid polluting the current environment
+        config_name=$(bash -c "source $SCRIPT_DIR/servers/$server_name.sh 2>/dev/null && echo \$CONFIG_NAME")
+    fi
+    
+    # If CONFIG_NAME wasn't defined, use a fallback approach
+    if [ -z "$config_name" ]; then
+        # Fallback: try common naming patterns
+        config_name="$server_name"
+    fi
+    
+    echo "$config_name"
 }
 
 clickable_link() {

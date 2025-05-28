@@ -161,5 +161,5 @@ update_mysql_config() {
     }'
     
     # Update the config using the common function
-    update_mcp_config "$CONFIG_NAME" "$server_config"
+    update_mcp_config "mysql" "$server_config"
 }

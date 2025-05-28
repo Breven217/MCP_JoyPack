@@ -46,7 +46,11 @@ create_atlassian_env() {
     echo -n "Enter your Jira username (email): "
     read -r jira_username
     
-    echo -n "Enter your Jira API token: "
+    # Use printf to create a clickable link in terminal
+    printf "Enter your Jira API token (created "
+    clickable_link "here" "https://id.atlassian.com/manage-profile/security/api-tokens"
+    printf "): "
+    
     read -r jira_token
     
     echo -n "Enter your Jira projects filter (comma-separated project keys, optional): "
@@ -85,5 +89,5 @@ update_atlassian_config() {
     }'
     
     # Update the config using the common function
-    update_mcp_config "$CONFIG_NAME" "$server_config"
+    update_mcp_config "atlassian" "$server_config"
 }

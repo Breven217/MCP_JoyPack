@@ -47,14 +47,8 @@ The Atlassian MCP server provides access to Jira functionality through the MCP p
 You'll need to provide:
 - Jira URL
 - Jira username (your email)
-- Jira API token
+- Jira API token (https://id.atlassian.com/manage-profile/security/api-tokens)
 - Jira projects filter (optional, comma-separated project keys)
-
-To get an API token for Jira:
-1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
-2. Click "Create API token"
-3. Give it a name and click "Create"
-4. Copy the token for use in the configuration
 
 ### Joyful SQL MCP Server
 
@@ -82,6 +76,15 @@ The Rollbar MCP server provides access to Rollbar functionality through the MCP 
 
 You'll need to provide:
 - Rollbar API Token
+
+### Github MCP Server
+
+The Github MCP server provides access to Github functionality through the MCP protocol.
+
+#### Configuration
+
+You'll need to provide:
+- Github API Token (https://github.com/settings/personal-access-tokens/new?target_name=BambooHR)
 
 ## Windsurf/Codeium Integration
 
@@ -119,7 +122,7 @@ setup_new-server() {
     
     # Update MCP config
     local server_config='{"command": "docker", "args": [...]}'  # Your server config
-    update_mcp_config "$CONFIG_NAME" "$server_config"
+    update_mcp_config "filename" "$server_config"
     
     echo -e "\n${GREEN}New Server MCP server installation completed!${NC}"
 }
