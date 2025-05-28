@@ -9,10 +9,6 @@ DOCUMENTATION_LINK="https://github.com/github/github-mcp-server"
 setup_github() {
     echo -e "\n${BLUE}Setting up Github MCP server...${NC}"
 
-    # Pull Docker image
-    # echo -e "\n${BLUE}Pulling Github MCP server Docker image...${NC}"
-    # docker pull ghcr.io/breven217/joyfulsql_mcp:latest
-    
     # Ensure MCP directory exists
     mkdir -p ~/.mcp
     
@@ -42,8 +38,8 @@ create_github_env() {
     echo -e "\n${BLUE}Setting up Github environment file...${NC}"
 
     printf "Enter your Github Personal Access Token (created "
-    clickable_link "here" "https://github.com/settings/personal-access-tokens/new?target_name=BambooHR"
-    printf "): "
+    clickable_link "here" "https://github.com/settings/tokens/new"
+    printf ", be sure to add the correct scopes and SSO auth): "
     read -r github_token
 
     # Create environment file
@@ -65,13 +61,10 @@ update_github_config() {
         "run",
         "-i",
         "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "--env-file",
+        "'"$HOME/.mcp/github.env"'",
         "ghcr.io/github/github-mcp-server"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
-      }
+      ]
     }'
     
     # Update the config using the common function

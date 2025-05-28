@@ -9,10 +9,6 @@ DOCUMENTATION_LINK="https://github.com/Breven217/JoyfulSQL_MCP"
 setup_mysql() {
     echo -e "\n${BLUE}Setting up MySQL MCP server...${NC}"
 
-    # Pull Docker image
-    echo -e "\n${BLUE}Pulling MySQL MCP server Docker image...${NC}"
-    docker pull ghcr.io/breven217/joyfulsql_mcp:latest
-    
     # Ensure MCP directory exists
     mkdir -p ~/.mcp
     

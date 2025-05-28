@@ -6,6 +6,13 @@ A modular, extensible system to easily install and configure MCP (Model Context 
 
 MCP JoyPack provides the easiest way to set up various MCP servers. It features a modular design that makes it simple to add support for new MCP servers.
 
+#### Current MCP Servers
+
+- Atlassian
+- MySQL
+- Rollbar
+- Github
+
 ## Prerequisites
 
 - Docker (https://docs.docker.com/get-docker/)

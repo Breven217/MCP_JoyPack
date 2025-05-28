@@ -9,10 +9,6 @@ DOCUMENTATION_LINK="https://github.com/sooperset/mcp-atlassian"
 setup_atlassian() {
     echo -e "\n${BLUE}Setting up Atlassian MCP server...${NC}"
 
-    # Pull Docker image
-    echo -e "\n${BLUE}Pulling Atlassian MCP server Docker image...${NC}"
-    docker pull ghcr.io/sooperset/mcp-atlassian:latest
-    
     # Ensure MCP directory exists
     mkdir -p ~/.mcp
     
