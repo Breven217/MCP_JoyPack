@@ -23,6 +23,14 @@ MCP JoyPack provides the easiest way to set up various MCP servers. It features 
 
 ### 🚀 Quick Install
 
+#### Option 1: One-Click Installer (macOS)
+
+Download and run the `Install MCP JoyPack.app` application from this repository.
+
+<i>Simply double-click the application to launch Terminal and run the installer</i>
+
+#### Option 2: Terminal Command
+
 <table align="center">
   <tr>
     <td>
@@ -35,7 +43,6 @@ bash -c "$(curl -fsSL https://bit.ly/MCPJoyPack)"
   </tr>
 </table>
 
-<br>
 <i>📋 Copy the command above and paste it in your terminal</i>
 
 </div>
