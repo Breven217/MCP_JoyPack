@@ -19,17 +19,26 @@ MCP JoyPack provides the easiest way to set up various MCP servers. It features 
 
 ## Installation
 
-### Option 1: One-Click Install
+<div align="center">
 
-<a href="https://bit.ly/MCPJoyPackInstall" style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 4px;">Install MCP JoyPack</a>
+### 🚀 Quick Install
 
-### Option 2: Command Line
-
-Install and configure MCP servers with this single command:
-
-```bash
+<table align="center">
+  <tr>
+    <td>
+      <kbd>
+      <pre style="margin:0;padding:15px;display:inline-block;background:#2b2b2b;color:#fff;border-radius:5px;font-size:14px;font-weight:bold;">
 bash -c "$(curl -fsSL https://bit.ly/MCPJoyPack)"
-```
+      </pre>
+      </kbd>
+    </td>
+  </tr>
+</table>
+
+<br>
+<i>📋 Copy the command above and paste it in your terminal</i>
+
+</div>
 
 That's it! The script will:
 1. Download the MCP JoyPack to a temporary directory
