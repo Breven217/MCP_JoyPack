@@ -23,27 +23,30 @@ MCP JoyPack provides the easiest way to set up various MCP servers. It features 
 
 ### 🚀 Quick Install
 
-#### Option 1: One-Click Installer (macOS)
+<div align="center">
+  <a href="x-terminal://bash%20-c%20%22%24%28curl%20-fsSL%20https%3A%2F%2Fbit.ly%2FMCPJoyPack%29%22">
+    <img src="https://img.shields.io/badge/Click_to_Install-MCP_JoyPack-blue?style=for-the-badge&logo=terminal" alt="Install MCP JoyPack" />
+  </a>
+</div>
 
-Download and run the `Install MCP JoyPack.app` application from this repository.
+<i>Click the button above to open Terminal and run the installer automatically</i>
+<br><br>
+<i>⚠️ Your browser may ask for permission to open Terminal</i>
 
-<i>Simply double-click the application to launch Terminal and run the installer</i>
-
-#### Option 2: Terminal Command
-
-<table align="center">
-  <tr>
-    <td>
-      <kbd>
-      <pre style="margin:0;padding:15px;display:inline-block;background:#2b2b2b;color:#fff;border-radius:5px;font-size:14px;font-weight:bold;">
+<div align="center">
+  <p>Or copy and paste this command in your terminal:</p>
+  <table align="center">
+    <tr>
+      <td>
+        <kbd>
+        <pre style="margin:0;padding:15px;display:inline-block;background:#2b2b2b;color:#fff;border-radius:5px;font-size:14px;font-weight:bold;">
 bash -c "$(curl -fsSL https://bit.ly/MCPJoyPack)"
-      </pre>
-      </kbd>
-    </td>
-  </tr>
-</table>
-
-<i>📋 Copy the command above and paste it in your terminal</i>
+        </pre>
+        </kbd>
+      </td>
+    </tr>
+  </table>
+</div>
 
 </div>
 
